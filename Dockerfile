@@ -1,15 +1,14 @@
-FROM armv7/armhf-ubuntu:16.04
+FROM ubuntu:16.04
 
 RUN apt-get update
 
-RUN apt-get install -y mono-complete mc libftdi1.2 usbutils
+RUN apt-get install -y mono-complete mc libftdi1.2 usbutils tzdata
 
-ADD ./etiss /opt/etiss
+ENV TZ=Europe/Berlin
+RUN echo $TZ | tee /etc/timezone
+RUN dpkg-reconfigure --frontend noninteractive tzdata
 
 VOLUME ["/opt/etiss"]
-
-RUN ln -s /usr/lib/arm-linux-gnueabihf/libftdi1.so.2.2.0 /usr/lib/arm-linux-gnueabihf/libftdi1.so
-RUN ln -s /lib/arm-linux-gnueabihf/libusb-1.0.so.0.1.0 /lib/arm-linux-gnueabihf/libusb-1.0.so
 
 EXPOSE 8080
 
